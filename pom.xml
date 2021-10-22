@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.example.rundeck</groupId>
+    <artifactId>plugin-jobOptions-Example</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <rundeck-core.version>3.4.5-20211018</rundeck-core.version>
+        <rundeck-plugin.version>1.2</rundeck-plugin.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.rundeck</groupId>
+            <artifactId>rundeck-core</artifactId>
+            <version>${rundeck-core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.rundeck</groupId>
+            <artifactId>rundeck-storage-api</artifactId>
+            <version>${rundeck-core.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/classes/lib</outputDirectory>
+                            <excludeTransitive>false</excludeTransitive>
+                            <excludeScope>provided</excludeScope>
+                            <includeScope>runtime</includeScope>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <outputDirectory>${project.build.directory}</outputDirectory>
+                    <archive>
+                        <manifest>
+                            <classpathPrefix>lib/</classpathPrefix>
+                        </manifest>
+                        <manifestEntries>
+                            <Rundeck-Plugin-Classnames>org.example.rundeck.plugin.PluginOptionProvider</Rundeck-Plugin-Classnames>
+                            <Rundeck-Plugin-File-Version>${project.version}</Rundeck-Plugin-File-Version>
+                            <Rundeck-Plugin-Version>${rundeck-plugin.version}</Rundeck-Plugin-Version>
+                            <Rundeck-Plugin-Archive>true</Rundeck-Plugin-Archive>
+                            <Rundeck-Plugin-libs></Rundeck-Plugin-libs>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
